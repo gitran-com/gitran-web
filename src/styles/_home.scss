@@ -1,0 +1,45 @@
+.home-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  .left {
+    @include flex-col;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 50%;
+    height: 400px;
+    padding: 200px 0;
+    text-align: left;
+  }
+  .title {
+    font-size: 500%;
+    font-weight: bold;
+  }
+  .desc {
+    color: $font-grey;
+    font-size: 150%;
+  }
+  .login {
+    @include flex-row;
+  }
+  $radius: 5px;
+  .login-input {
+    width: 300px;
+    height: 50px;
+    margin-right: 20px;
+    background-color: white;
+    border-radius: $radius;
+    border-style: solid;
+    box-sizing: border-box;
+  }
+  .login-button {
+    @include flex-row;
+    justify-content: center;
+    height: 50px;
+    padding: 0 20px;
+    color: white;
+    background-color: #32b256;
+    border-radius: $radius;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+}

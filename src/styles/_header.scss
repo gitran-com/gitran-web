@@ -1,0 +1,49 @@
+.header {
+  @include flex-col;
+  width: 100vw;
+  color: white;
+  background-color: #0c1c20;
+  background-image: linear-gradient(45deg, #0c1c20 0%, #250d96 100%);
+  .container {
+    @include flex-row;
+    justify-content: space-between;
+    width: 75vw;
+    height: 50px;
+  }
+  // navigation bar - left
+  .left {
+    @include flex-row;
+  }
+  .logo {
+    width: $m-icon;
+    height: $m-icon;
+    margin-right: 20px;
+  }
+  .menu {
+    @include flex-row;
+  }
+  .menu-item {
+    margin-right: 30px;
+  }
+  // navigation bar - right
+  .right {
+    @include flex-row;
+    justify-content: space-between;
+  }
+  // navigation bar - input bar
+  .input {
+    width: 180px;
+    height: 30px;
+    background-color: #ffffff55;
+    border: none;
+    border-radius: 15px;
+    &:focus {
+      background-color: #ffffff;
+      outline: none;
+    }
+  }
+  // navigation bar - login button
+  .login {
+    margin: 0 20px;
+  }
+}
