@@ -1,6 +1,5 @@
 import http from "./_request";
-import { LoginInfo } from "./types/auth";
+import { LoginInfo, RegisterInfo } from "./types/auth";
 
-export function login(data: LoginInfo) {
-  return http.post("/auth/login", data);
-}
+export const login = (data: LoginInfo) => http.post("/auth/login", data);
+export const authRegister = (data: RegisterInfo) => http.post("/auth/register", data);

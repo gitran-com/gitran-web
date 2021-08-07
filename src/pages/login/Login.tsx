@@ -5,25 +5,72 @@ import Logo from "@/components/Logo";
 import Button from "@/components/Button";
 import { MarkGithubIcon } from "@primer/octicons-react";
 import { githubLogin } from "@/utils/index";
-import { login } from "@/apis/auth";
+import { login as authLogin, authRegister } from "@/apis/auth";
 import { Code } from "@/apis/types/http";
 import { setToken } from "@/apis/token";
+import { setLoginToken } from "@/utils/setLoginToken";
 
-export default function Login() {
+export default function Login(page: "login" | "signup") {
+  const isLogin = page === "login";
+  // 表单信息
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
   // 是否显示错误提示
   const [openMsg, setOpenMsg] = useState(false);
-  const onSignIn = async () => {
-    const { code, data } = await login({ email, password });
-    if (code === Code["wrong-email"]) {
-      setOpenMsg(true);
+  // 错误信息
+  const [msg, setMsg] = useState("");
+
+  /**
+   * 点击按钮的回调函数
+   */
+  const onBtnClick = async () => {
+    isLogin ? signIn() : signUp();
+  };
+  /**
+   * 显示错误消息
+   * @param text 消息内容
+   */
+  const showAlert = (text: string) => {
+    setOpenMsg(true);
+    setMsg(text);
+  };
+  /**
+   * 登录
+   */
+  const signIn = async () => {
+    const { code, data } = await authLogin({ email, password });
+    if (code === Code["wrong email"]) {
+      showAlert("Wrong email address or password");
     } else {
-      const { expires_at: expire, refresh_before: refresh, token, url } = data;
-      setToken({ expire, refresh, token });
-      window.location.href = url;
+      setLoginToken(data);
     }
   };
+  /**
+   * 注册
+   */
+  const signUp = async () => {
+    // todo password complexity check
+    const passwordDiff = password !== password2;
+    // todo
+    const emailLegal: boolean = true;
+    const nameLegal: boolean = name.length !== 0;
+    passwordDiff && showAlert("Entered password differ");
+    !emailLegal && showAlert("Email is invalid");
+    !nameLegal && showAlert("Name is invalid");
+    if (!passwordDiff && emailLegal && nameLegal) {
+      const { code, data } = await authRegister({ name, email, password });
+      if (code === Code["email exists"]) {
+        showAlert("Email exists");
+      } else {
+        setLoginToken(data);
+      }
+    }
+  };
+  /**
+   * 关闭错误提示
+   */
   const onMsgClose = () => {
     setOpenMsg(false);
   };
@@ -37,14 +84,20 @@ export default function Login() {
         onClose={onMsgClose}
       >
         <Alert elevation={6} onClose={onMsgClose} severity={"error"}>
-          Wrong email address or password
+          {msg}
         </Alert>
       </Snackbar>
       <Logo />
-      <div className="title">Sign in to Gitran</div>
+      <div className="title">{isLogin ? "Sign in to Gitran" : "Sign up for Gitran"}</div>
       {/* 登录表单填写 */}
       <div className="form">
-        <div className="name form-item">
+        {!isLogin && (
+          <div className="name form-item">
+            <div>Name</div>
+            <input onInput={e => setName(e.currentTarget.value)} />
+          </div>
+        )}
+        <div className="email form-item">
           <div>Email address</div>
           <input onInput={e => setEmail(e.currentTarget.value)} />
         </div>
@@ -52,7 +105,13 @@ export default function Login() {
           <div>Password</div>
           <input type="password" onInput={e => setPassword(e.currentTarget.value)} />
         </div>
-        <Button text="Sign in" onClick={onSignIn} style={{ fontWeight: "bold" }} />
+        {!isLogin && (
+          <div className="password form-item">
+            <div>Repeat Password</div>
+            <input type="password" onInput={e => setPassword2(e.currentTarget.value)} />
+          </div>
+        )}
+        <Button text={isLogin ? "Sign in" : "Create account"} onClick={onBtnClick} style={{ fontWeight: "bold" }} />
         {/* 其他登录方式 */}
         <div className="others">
           <div className="or">or</div>

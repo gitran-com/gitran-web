@@ -27,7 +27,6 @@ function request(config: AxiosRequestConfig) {
     },
     err => {
       // todo 处理请求错误
-      console.log(err);
       return Promise.reject(err);
     }
   );

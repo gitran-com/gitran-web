@@ -5,7 +5,7 @@ export const TOKEN_KEY = "Gitran_Token";
 export interface Token {
   expire: number;
   refresh: number;
-  token: "string";
+  token: string;
 }
 
 /**
@@ -14,6 +14,12 @@ export interface Token {
  */
 export function setToken(token: Token): void {
   window.localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
+}
+/**
+ * 删除本地token
+ */
+function clearToken() {
+  window.localStorage.removeItem(TOKEN_KEY);
 }
 
 /**
@@ -32,10 +38,10 @@ export function refreshToken(oldToken: string): Promise<string> {
 }
 
 /**
- * 获取本地的token
+ * 异步获取本地的token
  */
 export function getTokenAsync(): Promise<string | null> {
-  return new Promise(async resolve => {
+  return new Promise(async (resolve, reject) => {
     const tokenStr = window.localStorage.getItem(TOKEN_KEY);
     if (!tokenStr) {
       resolve(null);
@@ -43,22 +49,27 @@ export function getTokenAsync(): Promise<string | null> {
       const tokenObj: Token = JSON.parse(tokenStr);
       const { expire, refresh, token } = tokenObj;
       // token未过期
-      if (expire * 1000 < Date.now()) {
+      if (expire * 1000 > Date.now()) {
         resolve(token);
       }
       // token已过期
       else {
         // 判断是否能刷新
-        if (refresh * 1000 < Date.now()) {
+        if (refresh * 1000 > Date.now()) {
           const newToken = await refreshToken(token);
           resolve(newToken);
         } else {
           // todo 重定向至登录页
+          clearToken();
+          reject("请重新登录");
         }
       }
     }
   });
 }
+/**
+ * 同步获取本地token
+ */
 export function getTokenSync(): string | null {
   return window.localStorage.getItem(TOKEN_KEY);
 }

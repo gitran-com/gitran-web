@@ -1,5 +1,6 @@
 export enum Code {
-  "wrong-email" = 1000,
+  "wrong email" = 1000,
+  "email exists" = 1001,
 }
 export interface HttpRes {
   success: boolean;

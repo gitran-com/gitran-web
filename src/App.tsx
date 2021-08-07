@@ -9,7 +9,8 @@ export default function App() {
     <div className="App">
       <Switch>
         <Route path="/" component={Index} exact />
-        <Route path="/login" component={Login} />
+        <Route path="/login" component={() => Login("login")} />
+        <Route path="/signup" component={() => Login("signup")} />
       </Switch>
     </div>
   );
