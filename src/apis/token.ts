@@ -1,7 +1,7 @@
 import axios from "axios";
 import CONFIG from "../config";
 
-const TOKEN_KEY = "Gitran_Token";
+export const TOKEN_KEY = "Gitran_Token";
 export interface Token {
   expire: number;
   refresh: number;
@@ -12,7 +12,7 @@ export interface Token {
  * 设置本地的token
  * @param token
  */
-function setToken(token: Token): void {
+export function setToken(token: Token): void {
   window.localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
 }
 
@@ -34,7 +34,7 @@ export function refreshToken(oldToken: string): Promise<string> {
 /**
  * 获取本地的token
  */
-export function getToken(): Promise<string | null> {
+export function getTokenAsync(): Promise<string | null> {
   return new Promise(async resolve => {
     const tokenStr = window.localStorage.getItem(TOKEN_KEY);
     if (!tokenStr) {
@@ -58,4 +58,7 @@ export function getToken(): Promise<string | null> {
       }
     }
   });
+}
+export function getTokenSync(): string | null {
+  return window.localStorage.getItem(TOKEN_KEY);
 }

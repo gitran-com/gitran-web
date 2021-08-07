@@ -1,0 +1,10 @@
+.button-component {
+  @include flex-row;
+  justify-content: center;
+  height: 50px;
+  padding: 0 20px;
+  color: white;
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+}

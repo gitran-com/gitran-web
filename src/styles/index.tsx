@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { Link } from "react-router-dom";
 import logoImage from "@assets/favicon.png";
 
 const Header: FC = () => {
@@ -16,8 +17,8 @@ const Header: FC = () => {
         </div>
         <div className="right">
           <input className="input" placeholder="Search Gitran" />
-          <div>LOG IN</div>
-          <div>SIGN UP</div>
+          <Link to="/login">Sign In</Link>
+          <Link to="/login">SIGN UP</Link>
         </div>
       </div>
     </div>
