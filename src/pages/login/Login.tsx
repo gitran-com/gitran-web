@@ -1,14 +1,12 @@
 import React, { useState } from "react";
+import { MarkGithubIcon } from "@primer/octicons-react";
 import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import Logo from "@/components/Logo";
 import Button from "@/components/Button";
-import { MarkGithubIcon } from "@primer/octicons-react";
-import { githubLogin } from "@/utils/index";
-import { login as authLogin, authRegister } from "@/apis/auth";
+import { githubLogin, setLoginToken } from "@/utils/index";
+import { authLogin, authRegister } from "@/apis/index";
 import { Code } from "@/apis/types/http";
-import { setToken } from "@/apis/token";
-import { setLoginToken } from "@/utils/setLoginToken";
 
 export default function Login(page: "login" | "signup") {
   const isLogin = page === "login";
