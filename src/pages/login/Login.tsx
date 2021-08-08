@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { MarkGithubIcon } from "@primer/octicons-react";
-import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import Logo from "@/components/Logo";
 import Button from "@/components/Button";
+import Toast from "@/components/Toast";
 import { githubLogin, setLoginToken } from "@/utils/index";
 import { authLogin, authRegister } from "@/apis/index";
 import { Code } from "@/apis/types/http";
@@ -15,11 +14,6 @@ export default function Login(page: "login" | "signup") {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-  // 是否显示错误提示
-  const [openMsg, setOpenMsg] = useState(false);
-  // 错误信息
-  const [msg, setMsg] = useState("");
-
   /**
    * 点击按钮的回调函数
    */
@@ -27,20 +21,12 @@ export default function Login(page: "login" | "signup") {
     isLogin ? signIn() : signUp();
   };
   /**
-   * 显示错误消息
-   * @param text 消息内容
-   */
-  const showAlert = (text: string) => {
-    setOpenMsg(true);
-    setMsg(text);
-  };
-  /**
    * 登录
    */
   const signIn = async () => {
     const { code, data } = await authLogin({ email, password });
     if (code === Code["wrong email"]) {
-      showAlert("Wrong email address or password");
+      Toast.error("Wrong email address or password");
     } else {
       setLoginToken(data);
     }
@@ -54,37 +40,20 @@ export default function Login(page: "login" | "signup") {
     // todo
     const emailLegal: boolean = true;
     const nameLegal: boolean = name.length !== 0;
-    passwordDiff && showAlert("Entered password differ");
-    !emailLegal && showAlert("Email is invalid");
-    !nameLegal && showAlert("Name is invalid");
+    passwordDiff && Toast.error("Entered password differ");
+    !emailLegal && Toast.error("Email is invalid");
+    !nameLegal && Toast.error("Name is invalid");
     if (!passwordDiff && emailLegal && nameLegal) {
       const { code, data } = await authRegister({ name, email, password });
       if (code === Code["email exists"]) {
-        showAlert("Email exists");
+        Toast.error("Email exists");
       } else {
         setLoginToken(data);
       }
     }
   };
-  /**
-   * 关闭错误提示
-   */
-  const onMsgClose = () => {
-    setOpenMsg(false);
-  };
   return (
     <div className="login">
-      {/* 错误提示框 */}
-      <Snackbar
-        anchorOrigin={{ horizontal: "center", vertical: "top" }}
-        open={openMsg}
-        autoHideDuration={5000}
-        onClose={onMsgClose}
-      >
-        <Alert elevation={6} onClose={onMsgClose} severity={"error"}>
-          {msg}
-        </Alert>
-      </Snackbar>
       <Logo />
       <div className="title">{isLogin ? "Sign in to Gitran" : "Sign up for Gitran"}</div>
       {/* 登录表单填写 */}
