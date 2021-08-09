@@ -22,7 +22,8 @@
       "@/utils/*": ["src/utils/*"],
       "@/pages/*": ["src/pages/*"],
       "@/styles/*": ["src/styles/*"],
-      "@/config/*": ["src/config/*"]
+      "@/config/*": ["src/config/*"],
+      "@/types/*": ["src/types/*"]
     }
   },
   "types": ["vite/client"],

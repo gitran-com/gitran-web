@@ -1,14 +1,18 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { MarkGithubIcon } from "@primer/octicons-react";
 import Logo from "@/components/Logo";
 import Button from "@/components/Button";
 import Toast from "@/components/Toast";
-import { githubLogin, navigateTo } from "@/utils/index";
-import { authLogin, authRegister, setToken } from "@/apis/index";
+import { githubLogin, isLogin, setLoginToken } from "@/utils/index";
+import { authLogin, authRegister } from "@/apis/index";
 import { Code } from "@/apis/types/http";
 
 export default function Index(page: "login" | "signup") {
-  const isLogin = page === "login";
+  if (isLogin()) {
+    return <Redirect to="/" />;
+  }
+  const isLoginPage = page === "login";
   // 表单信息
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,7 +22,7 @@ export default function Index(page: "login" | "signup") {
    * 点击按钮的回调函数
    */
   const onBtnClick = async () => {
-    isLogin ? signIn() : signUp();
+    isLoginPage ? signIn() : signUp();
   };
   /**
    * 登录
@@ -52,22 +56,14 @@ export default function Index(page: "login" | "signup") {
       }
     }
   };
-  /**
-   * 第一次登陆时设置本地的token并跳转至之前的页面
-   */
-  function setLoginToken(data: { expires_at: number; refresh_before: number; token: string; url: string }) {
-    const { expires_at: expire, refresh_before: refresh, token, url } = data;
-    setToken({ expire, refresh, token });
-    navigateTo(url ? url : "/");
-  }
 
   return (
     <div className="login">
       <Logo />
-      <div className="title">{isLogin ? "Sign in to Gitran" : "Sign up for Gitran"}</div>
+      <div className="title">{isLoginPage ? "Sign in to Gitran" : "Sign up for Gitran"}</div>
       {/* 登录表单填写 */}
       <div className="form">
-        {!isLogin && (
+        {!isLoginPage && (
           <div className="name form-item">
             <div>Name</div>
             <input onInput={e => setName(e.currentTarget.value)} />
@@ -81,13 +77,13 @@ export default function Index(page: "login" | "signup") {
           <div>Password</div>
           <input type="password" onInput={e => setPassword(e.currentTarget.value)} />
         </div>
-        {!isLogin && (
+        {!isLoginPage && (
           <div className="password form-item">
             <div>Repeat Password</div>
             <input type="password" onInput={e => setPassword2(e.currentTarget.value)} />
           </div>
         )}
-        <Button text={isLogin ? "Sign in" : "Create account"} onClick={onBtnClick} style={{ fontWeight: "bold" }} />
+        <Button text={isLoginPage ? "Sign in" : "Create account"} onClick={onBtnClick} style={{ fontWeight: "bold" }} />
         {/* 其他登录方式 */}
         <div className="others">
           <div className="or">or</div>

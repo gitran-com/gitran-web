@@ -23,6 +23,7 @@
   // navigation bar - right
   .right {
     @include flex-row;
+    width: 250px;
     justify-content: space-between;
   }
   // navigation bar - input bar

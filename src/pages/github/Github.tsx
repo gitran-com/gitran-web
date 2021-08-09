@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import Logo from "@/components/Logo";
 import Button from "@/components/Button";
 import Toast from "@/components/Toast";
 import { authGithubNew } from "@/apis/index";
-import { setLoginToken } from "@/utils/index";
+import { isLogin, setLoginToken } from "@/utils/index";
 
 export default function Github() {
+  if (isLogin()) {
+    return <Redirect to="/" />;
+  }
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const onBtnClick = async () => {

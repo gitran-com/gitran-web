@@ -4,8 +4,8 @@ import { navigateTo, storage } from "@/utils/index";
 
 export const TOKEN_KEY = "Gitran_Token";
 export interface Token {
-  expire: number;
-  refresh: number;
+  expiresAt: number;
+  refreshBefore: number;
   token: string;
 }
 
@@ -32,9 +32,9 @@ export function refreshToken(oldToken: string): Promise<string> {
     const { data } = await axios.post(`${CONFIG.http.baseURL}/auth/refresh`, null, {
       headers: { Authorization: `Bearer ${oldToken}` },
     });
-    const { expires_at: expire, refresh_before: refresh, token } = data;
+    const { expires_at: expiresAt, refresh_before: refreshBefore, token } = data;
     resolve(token);
-    setToken({ expire, refresh, token });
+    setToken({ expiresAt, refreshBefore, token });
   });
 }
 
@@ -48,15 +48,15 @@ export function getTokenAsync(): Promise<string | null> {
       resolve(null);
     } else {
       const tokenObj: Token = JSON.parse(tokenStr);
-      const { expire, refresh, token } = tokenObj;
+      const { expiresAt, refreshBefore, token } = tokenObj;
       // token未过期
-      if (expire * 1000 > Date.now()) {
+      if (expiresAt * 1000 > Date.now()) {
         resolve(token);
       }
       // token已过期
       else {
         // 判断是否能刷新
-        if (refresh * 1000 > Date.now()) {
+        if (refreshBefore * 1000 > Date.now()) {
           const newToken = await refreshToken(token);
           resolve(newToken);
         } else {
