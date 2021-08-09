@@ -1,5 +1,6 @@
 import axios from "axios";
 import CONFIG from "../config";
+import { navigateTo, storage } from "@/utils/index";
 
 export const TOKEN_KEY = "Gitran_Token";
 export interface Token {
@@ -12,14 +13,14 @@ export interface Token {
  * 设置本地的token
  * @param token
  */
-export function setToken(token: Token): void {
-  window.localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
+export function setToken(token: Token) {
+  storage.set(TOKEN_KEY, JSON.stringify(token));
 }
 /**
  * 删除本地token
  */
 function clearToken() {
-  window.localStorage.removeItem(TOKEN_KEY);
+  storage.remove(TOKEN_KEY);
 }
 
 /**
@@ -38,11 +39,11 @@ export function refreshToken(oldToken: string): Promise<string> {
 }
 
 /**
- * 异步获取本地的token
+ * 异步获取本地的token 如果过期则刷新
  */
 export function getTokenAsync(): Promise<string | null> {
   return new Promise(async (resolve, reject) => {
-    const tokenStr = window.localStorage.getItem(TOKEN_KEY);
+    const tokenStr = storage.get(TOKEN_KEY);
     if (!tokenStr) {
       resolve(null);
     } else {
@@ -59,7 +60,7 @@ export function getTokenAsync(): Promise<string | null> {
           const newToken = await refreshToken(token);
           resolve(newToken);
         } else {
-          // todo 重定向至登录页
+          navigateTo("/login");
           clearToken();
           reject("请重新登录");
         }
@@ -71,5 +72,5 @@ export function getTokenAsync(): Promise<string | null> {
  * 同步获取本地token
  */
 export function getTokenSync(): string | null {
-  return window.localStorage.getItem(TOKEN_KEY);
+  return storage.get(TOKEN_KEY);
 }

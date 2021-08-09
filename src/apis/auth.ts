@@ -1,6 +1,6 @@
+import axios from "axios";
 import http from "./_request";
 import { LoginInfo, RegisterInfo } from "./types/auth";
-import axios from "axios";
 import CONFIG from "../config";
 
 /**

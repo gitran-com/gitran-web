@@ -3,8 +3,8 @@ import { MarkGithubIcon } from "@primer/octicons-react";
 import Logo from "@/components/Logo";
 import Button from "@/components/Button";
 import Toast from "@/components/Toast";
-import { githubLogin, setLoginToken } from "@/utils/index";
-import { authLogin, authRegister } from "@/apis/index";
+import { githubLogin, navigateTo } from "@/utils/index";
+import { authLogin, authRegister, setToken } from "@/apis/index";
 import { Code } from "@/apis/types/http";
 
 export default function Index(page: "login" | "signup") {
@@ -52,6 +52,15 @@ export default function Index(page: "login" | "signup") {
       }
     }
   };
+  /**
+   * 第一次登陆时设置本地的token并跳转至之前的页面
+   */
+  function setLoginToken(data: { expires_at: number; refresh_before: number; token: string; url: string }) {
+    const { expires_at: expire, refresh_before: refresh, token, url } = data;
+    setToken({ expire, refresh, token });
+    navigateTo(url ? url : "/");
+  }
+
   return (
     <div className="login">
       <Logo />
