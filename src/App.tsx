@@ -5,6 +5,8 @@ import { GlobalToast } from "./components/Toast";
 const GitHub = lazy(() => import("./pages/github/Github"));
 const Index = lazy(() => import("./pages/index/Index"));
 const Login = lazy(() => import("./pages/login/Login"));
+const Signup = lazy(() => import("./pages/login/Signup"));
+const NotFound = lazy(() => import("./pages/404/404"));
 
 export default function App() {
   return (
@@ -13,9 +15,10 @@ export default function App() {
       <Suspense fallback={<div>loading...</div>}>
         <Switch>
           <Route path="/" component={Index} exact />
-          <Route path="/login" component={() => Login("login")} exact />
+          <Route path="/login" component={Login} exact />
           <Route path="/login/github/new" component={GitHub} />
-          <Route path="/signup" component={() => Login("signup")} />
+          <Route path="/signup" component={Signup} />
+          <Route path="*" component={NotFound} />
         </Switch>
       </Suspense>
     </div>
