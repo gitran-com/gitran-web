@@ -23,8 +23,8 @@
   // navigation bar - right
   .right {
     @include flex-row;
-    width: 250px;
-    justify-content: space-between;
+    width: 380px;
+    justify-content: space-around;
   }
   // navigation bar - input bar
   .input {
@@ -39,7 +39,10 @@
     }
   }
   // navigation bar - login button
-  .login {
+  .login,
+  .signup {
     margin: 0 20px;
+    color: white;
+    text-decoration: none;
   }
 }
