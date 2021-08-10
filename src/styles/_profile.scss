@@ -1,0 +1,25 @@
+.profile {
+  max-width: $content-width;
+  margin: 0 auto;
+  padding: 50px 0;
+  .profile-container {
+    @include flex-row;
+    margin: 0 30px;
+  }
+  .profile-sidebar {
+    @include flex-col;
+    align-items: flex-start;
+    width: 25%;
+    .name {
+      margin: 20px 0;
+      font-size: 250%;
+      font-weight: 600;
+    }
+    .bio {
+      font-size: 110%;
+    }
+  }
+  .profile-content {
+    width: 75%;
+  }
+}

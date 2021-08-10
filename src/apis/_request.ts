@@ -24,7 +24,6 @@ function request(config: AxiosRequestConfig) {
   // 响应拦截器
   instance.interceptors.response.use(
     ({ data }) => {
-      console.log({ ...data, data: formatJson(data.data) });
       return { ...data, data: formatJson(data.data) };
     },
     err => {

@@ -1,6 +1,6 @@
-import { setToken, Token, TOKEN_KEY, getTokenSync } from "@/apis/token";
+import { setToken, Token, getTokenSync } from "@/apis/token";
 import { navigateTo } from "./navigateTo";
-import { storage } from "./storage";
+import { storage, TOKEN_KEY } from "./storage";
 
 /**
  * 第一次登陆时设置本地的token并跳转至之前的页面

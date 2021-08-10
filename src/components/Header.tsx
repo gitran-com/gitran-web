@@ -1,25 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { isLogin, logout, navigateTo } from "@/utils/index";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { AVATAR_KEY, isLogin, logout, navigateTo, storage } from "@/utils/index";
 import { getUser } from "@/apis/user";
 import { UserInfo } from "../types/user";
 import Logo from "./Logo";
-import { Avatar, Button, Menu, MenuItem } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Button, Menu, MenuItem, Avatar } from "@material-ui/core";
 
-const initUserInfo: UserInfo = {
-  id: -1,
-  name: "",
-  email: "",
-  avatarUrl: "",
-  bio: "",
-  githubId: -1,
-  createdAt: "",
-  updatedAt: "",
-};
 export default function Header() {
   const menu: string[] = ["API", "About"];
   const loggedIn = isLogin();
-  const [user, setUser] = useState<UserInfo>(initUserInfo);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   useEffect(() => {
     if (loggedIn) {
@@ -31,7 +20,10 @@ export default function Header() {
    */
   const initUser = async () => {
     const { data } = await getUser();
-    setUser(data);
+    const { user }: { user: UserInfo } = data;
+    if (storage.get(AVATAR_KEY) !== user.avatarUrl) {
+      storage.set(AVATAR_KEY, user.avatarUrl);
+    }
   };
   /**
    * 点击头像按钮
@@ -52,11 +44,13 @@ export default function Header() {
     setAnchorEl(null);
     logout();
   };
-  return (
+  return window.location.pathname === "/login" || window.location.pathname === "/signup" ? null : (
     <div className="header">
       <div className="container">
         <div className="left">
-          <Logo size={30} style={{ marginRight: "20px" }} />
+          <Link to="/">
+            <Logo size={30} style={{ marginRight: "20px" }} />
+          </Link>
           <div className="menu">
             {menu.map((item: string) => (
               <div className="menu-item" key={item}>
@@ -70,7 +64,7 @@ export default function Header() {
           {loggedIn ? (
             <>
               <Button aria-controls="simple-menu" aria-haspopup="true" onClick={onAvatarClick}>
-                <Avatar src={user.avatarUrl} />
+                <Avatar alt="shaw" src={storage.get(AVATAR_KEY) || ""} />
               </Button>
             </>
           ) : (

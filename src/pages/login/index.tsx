@@ -9,7 +9,7 @@ import { authLogin, authRegister } from "@/apis/index";
 import { Code } from "@/apis/types/http";
 
 export default function Index(page: "login" | "signup") {
-  if (isLogin()) {
+  if (isLogin() && page === "login") {
     return <Redirect to="/" />;
   }
   const isLoginPage = page === "login";

@@ -1,8 +1,7 @@
 import axios from "axios";
 import CONFIG from "../config";
-import { navigateTo, storage } from "@/utils/index";
+import { navigateTo, storage, TOKEN_KEY } from "@/utils/index";
 
-export const TOKEN_KEY = "Gitran_Token";
 export interface Token {
   expiresAt: number;
   refreshBefore: number;

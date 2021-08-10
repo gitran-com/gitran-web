@@ -4,3 +4,5 @@ export const storage = {
   set: (key: string, val: string) => window.localStorage.setItem(key, val),
   clear: () => window.localStorage.clear(),
 };
+export const AVATAR_KEY = "Gitran_Avatar";
+export const TOKEN_KEY = "Gitran_Token";
