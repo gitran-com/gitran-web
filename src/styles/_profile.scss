@@ -10,6 +10,13 @@
     @include flex-col;
     align-items: flex-start;
     width: 25%;
+    // 头像的父元素 保证头像为正方形显示
+    .avatar-container {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 100%;
+    }
     .name {
       margin: 20px 0;
       font-size: 250%;

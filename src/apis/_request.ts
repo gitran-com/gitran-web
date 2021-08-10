@@ -3,6 +3,8 @@ import CONFIG from "@/config/index";
 import { getTokenAsync } from "./token";
 import { HttpRes } from "./types/http";
 import { formatJson } from "@/utils/formatJson";
+import { navigateTo } from "@/utils/navigateTo";
+import Toast from "@/components/Toast";
 
 function request(config: AxiosRequestConfig) {
   const instance = axios.create({ baseURL: CONFIG.http.baseURL, timeout: 10000, withCredentials: true });
@@ -28,6 +30,13 @@ function request(config: AxiosRequestConfig) {
     },
     err => {
       // todo 处理请求错误
+      switch (err.response.status) {
+        case 404:
+          navigateTo("/404");
+          break;
+        default:
+          Toast.error("Something is wrong...");
+      }
       return Promise.reject(err);
     }
   );

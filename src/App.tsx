@@ -22,6 +22,7 @@ export default function App() {
           <Route path="/login/github/new" component={GitHub} />
           <Route path="/signup" component={Signup} />
           <Route path="/me" component={Profile} />
+          <Route path="/user/:userId" component={Profile} />
           <Route path="*" component={NotFound} />
         </Switch>
       </Suspense>

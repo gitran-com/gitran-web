@@ -1,4 +1,4 @@
-type UserId = number;
+export type UserId = number;
 export interface UserInfo {
   id: UserId;
   name: string;
