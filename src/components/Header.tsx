@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { isLogin, logout } from "@/utils/index";
+import { isLogin, logout, navigateTo } from "@/utils/index";
 import { getUser } from "@/apis/user";
 import { UserInfo } from "../types/user";
 import Logo from "./Logo";
@@ -36,13 +36,19 @@ export default function Header() {
   /**
    * 点击头像按钮
    */
-  const handleAvatarClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onAvatarClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  /**
+   * 点击Profile选项
+   */
+  const onProfileClick = () => {
+    navigateTo("/me");
   };
-  const handleLogout = () => {
+  const onProjectClick = () => {
+    navigateTo("/me");
+  };
+  const onLogout = () => {
     setAnchorEl(null);
     logout();
   };
@@ -63,7 +69,7 @@ export default function Header() {
           <input className="input" placeholder="Search Gitran" />
           {loggedIn ? (
             <>
-              <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleAvatarClick}>
+              <Button aria-controls="simple-menu" aria-haspopup="true" onClick={onAvatarClick}>
                 <Avatar src={user.avatarUrl} />
               </Button>
             </>
@@ -72,7 +78,7 @@ export default function Header() {
               <Link className="login" to="/login">
                 LOG IN
               </Link>
-              <Link className="signup" to="/login">
+              <Link className="signup" to="/signup">
                 SIGN UP
               </Link>
             </>
@@ -86,11 +92,11 @@ export default function Header() {
           anchorEl={anchorEl}
           keepMounted
           open={Boolean(anchorEl)}
-          onClose={handleClose}
+          onClose={() => setAnchorEl(null)}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My Projects</MenuItem>
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem onClick={onProfileClick}>Profile</MenuItem>
+          <MenuItem onClick={onProjectClick}>My Projects</MenuItem>
+          <MenuItem onClick={onLogout}>Logout</MenuItem>
         </Menu>
       </div>
     </div>
