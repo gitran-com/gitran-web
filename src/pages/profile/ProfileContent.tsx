@@ -37,9 +37,7 @@ export default function Content() {
                   ))}
                 </div>
               </div>
-              <div className="projects-item-right">
-                <GearIcon size={20} />
-              </div>
+              <div className="projects-item-right">{isMe && <GearIcon size={20} />}</div>
             </div>
           );
         })}

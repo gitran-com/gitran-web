@@ -4,6 +4,7 @@
   padding: 50px 0;
   .profile-container {
     @include flex-row;
+    align-items: flex-start;
     margin: 0 30px;
   }
   // 个人资料页侧边栏
@@ -72,6 +73,17 @@
     &:hover {
       color: rgb(114, 114, 114);
       transform: rotate(90deg);
+    }
+  }
+  // 编辑Profile
+  .edit {
+    .edit-input {
+      width: 100%;
+      margin: 16px 0;
+    }
+    .edit-button {
+      width: 80px;
+      margin: 0 5px;
     }
   }
 }

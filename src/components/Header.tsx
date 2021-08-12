@@ -37,6 +37,7 @@ export default function Header() {
   const onProfileClick = () => {
     navigateTo("/me");
   };
+  const onSettingsClick = () => {};
   const onProjectClick = () => {
     navigateTo("/me");
   };
@@ -89,6 +90,7 @@ export default function Header() {
           onClose={() => setAnchorEl(null)}
         >
           <MenuItem onClick={onProfileClick}>Profile</MenuItem>
+          <MenuItem onClick={onSettingsClick}>Settings</MenuItem>
           <MenuItem onClick={onProjectClick}>My Projects</MenuItem>
           <MenuItem onClick={onLogout}>Logout</MenuItem>
         </Menu>
