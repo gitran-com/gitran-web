@@ -94,10 +94,14 @@ const Edit = ({
     } else if (!bio) {
       Toast.error("Bio cannot be empty");
     } else {
-      await putUser(name, bio);
-      refresh();
-      cancel();
-      Toast.success("Update Successfully");
+      if (name !== initName || bio !== initBio) {
+        await putUser(name, bio);
+        refresh();
+        cancel();
+        Toast.success("Update Successfully");
+      } else {
+        cancel();
+      }
     }
   };
   return (
