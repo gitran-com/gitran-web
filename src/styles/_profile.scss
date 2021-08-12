@@ -6,10 +6,12 @@
     @include flex-row;
     margin: 0 30px;
   }
+  // 个人资料页侧边栏
   .profile-sidebar {
     @include flex-col;
     align-items: flex-start;
     width: 25%;
+    padding: 0 20px;
     // 头像的父元素 保证头像为正方形显示
     .avatar-container {
       position: relative;
@@ -24,9 +26,52 @@
     }
     .bio {
       font-size: 110%;
+      text-align: left;
     }
   }
+  // 个人资料页项目列表
   .profile-content {
     width: 75%;
+    padding: 0 20px;
+  }
+  .projects {
+    @include flex-col;
+  }
+  .projects-item {
+    @include flex-row;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 136px;
+    width: 100%;
+    padding: 24px 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid $line-grey;
+  }
+  .projects-item-left {
+    @include flex-col;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 100%;
+  }
+  .projects-item-name {
+    font-size: 150%;
+    color: $blue;
+  }
+  .projects-item-flags {
+    @include flex-row;
+  }
+  .projects-item-flag {
+    width: 20px;
+    height: 20px;
+    margin: 0 2px;
+  }
+  .projects-item-right {
+    color: $font-grey;
+    cursor: pointer;
+    transition: all 0.5s;
+    &:hover {
+      color: rgb(114, 114, 114);
+      transform: rotate(90deg);
+    }
   }
 }

@@ -32,7 +32,9 @@ export default function SideBar() {
   return (
     <div className="profile-sidebar">
       <div className="avatar-container">
-        <Avatar src={user.avatarUrl || ""} style={{ position: "absolute", width: "100%", height: "100%" }} />
+        {user.avatarUrl && (
+          <Avatar src={user.avatarUrl} style={{ position: "absolute", width: "100%", height: "100%" }} />
+        )}
       </div>
       <div className="name">{user.name}</div>
       <div className="bio">{user.bio}</div>
