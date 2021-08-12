@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { getUserProject } from "@/apis/index";
-import { ProjectInfo } from "@/types/project";
-import { langToFlag, Lang } from "@/utils/index";
+import { useRouteMatch } from "react-router-dom";
 import { GearIcon } from "@primer/octicons-react";
+import { getUserProject, getUsersProjects } from "@/apis/index";
+import { UserId, ProjectInfo } from "@/types/index";
+import { langToFlag, Lang } from "@/utils/index";
 
 export default function Content() {
+  const { userId } = useRouteMatch().params as { userId: UserId };
+  const isMe: boolean = window.location.pathname === "/me";
   const [projects, setProjects] = useState<ProjectInfo[]>([]);
   useEffect(() => {
     initProjectList();
   }, []);
   const initProjectList = async () => {
-    const { data } = await getUserProject();
+    const { data } = await (isMe ? getUserProject() : getUsersProjects(userId));
     const { projs }: { projs: ProjectInfo[] | null } = data;
     if (projs) {
       setProjects(projs);
