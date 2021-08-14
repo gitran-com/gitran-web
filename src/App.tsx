@@ -1,13 +1,15 @@
 import React, { lazy, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
+import { CircularProgress } from "@material-ui/core";
 import { GlobalToast } from "./components/Toast";
 import Header from "./components/Header";
 const GitHub = lazy(() => import("./pages/github/Github"));
 const Index = lazy(() => import("./pages/index/Index"));
 const Login = lazy(() => import("./pages/login/Login"));
 const Signup = lazy(() => import("./pages/login/Signup"));
-const Profile = lazy(() => import("./pages/profile/profile"));
+const Profile = lazy(() => import("./pages/profile/Profile"));
+const New = lazy(() => import("./pages/new/New"));
 const NotFound = lazy(() => import("./pages/404/404"));
 
 export default function App() {
@@ -15,7 +17,7 @@ export default function App() {
     <div className="App">
       <GlobalToast />
       <Header />
-      <Suspense fallback={<div>loading...</div>}>
+      <Suspense fallback={<CircularProgress />}>
         <Switch>
           <Route path="/" component={Index} exact />
           <Route path="/login" component={Login} exact />
@@ -23,6 +25,7 @@ export default function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/me" component={Profile} />
           <Route path="/user/:userId" component={Profile} />
+          <Route path="/new" component={New} />
           <Route path="*" component={NotFound} />
         </Switch>
       </Suspense>
