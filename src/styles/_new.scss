@@ -10,113 +10,127 @@
     width: 100%;
     margin: 16px 0;
   }
-}
-// 项目类型选项
-.new-tab {
-  @include flex-row;
-  position: relative;
-  height: 50px;
-  width: 100%;
-  border-bottom: 1px solid $border-grey;
-  .tab-item {
-    @include flex-row;
-    justify-content: center;
-    width: 200px;
-    height: 100%;
-    color: $font-grey;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
+  // 项目类型选项
+  .new-type {
+    .tab {
+      @include flex-row;
+      position: relative;
+      height: 50px;
+      width: 100%;
+      margin-top: 20px;
+      border-bottom: 1px solid $border-grey;
+      .tab-item {
+        @include flex-row;
+        justify-content: center;
+        width: 200px;
+        height: 100%;
+        color: $font-grey;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .tab-cur {
+        color: $blue;
+      }
+      .tab-bottom {
+        position: absolute;
+        bottom: 0;
+        width: 200px;
+        height: 2px;
+        background-color: $blue;
+        transition: transform 0.2s;
+      }
+    }
+    .settings {
+      @include flex-col;
+      padding: 20px 0;
+      height: 200px;
+    }
   }
-  .tab-cur {
-    color: $blue;
-  }
-  .tab-bottom {
-    position: absolute;
-    bottom: 0;
-    width: 200px;
-    height: 2px;
-    background-color: $blue;
-    transition: transform 0.2s;
-  }
-}
 
-// 选择语言
-.langs {
-  @include flex-row;
-  align-items: flex-start;
-  justify-content: space-between;
-  .langs-item {
-    @include flex-col;
-    align-items: flex-start;
-    width: 35%;
-    height: 100%;
-  }
-  .langs-title {
+  // 选择语言
+  .langs {
     @include flex-row;
+    align-items: flex-start;
     justify-content: space-between;
-    width: 100%;
-    height: 50px;
-    font-size: 120%;
-    font-weight: bold;
-    border-bottom: 1px solid $border-grey;
-  }
-  .list-add {
-    cursor: pointer;
-    transition: all 0.2s;
-    &:hover {
-      transform: rotate(90deg);
+    .langs-item {
+      @include flex-col;
+      align-items: flex-start;
+      width: 35%;
+      height: 100%;
     }
-  }
-  .langs-list {
-    @include flex-col;
-    align-items: flex-start;
-    width: 100%;
-  }
-  .list-item {
-    @include flex-row;
-    position: relative;
-    width: 100%;
-    height: 60px;
-    padding: 10px;
-    font-weight: 500;
-    transition: all 0.2s;
-    box-sizing: border-box;
-    cursor: pointer;
-    &:hover {
-      background-color: $line-grey;
+    .langs-title {
+      @include flex-row;
+      justify-content: space-between;
+      width: 100%;
+      height: 50px;
+      font-weight: bold;
+      border-bottom: 1px solid $border-grey;
     }
-  }
-  .list-flag {
-    width: 40px;
-    height: 40px;
-    margin-right: 20px;
-    border-radius: 50%;
-    box-shadow: 5px 5px 15px #00000022;
-  }
-  .list-text {
-    @include flex-col;
-    align-items: flex-start;
-  }
-  .list-iso {
-    color: $font-grey;
-    font-size: 90%;
-    font-weight: normal;
-  }
-  .list-del {
-    position: absolute;
-    right: 10px;
-    &:hover .list-del-icon {
-      color: black;
+    .list-add {
+      cursor: pointer;
+      transition: all 0.2s;
+      &:hover {
+        transform: rotate(90deg);
+      }
     }
-  }
-  .list-del-icon {
-    color: $font-grey;
+    .langs-list {
+      @include flex-col;
+      align-items: flex-start;
+      width: 100%;
+    }
+    .list-item {
+      @include flex-row;
+      position: relative;
+      width: 100%;
+      height: 60px;
+      padding: 10px;
+      font-weight: 500;
+      transition: all 0.2s;
+      box-sizing: border-box;
+      cursor: pointer;
+      &:hover {
+        background-color: $line-grey;
+      }
+    }
+    .list-flag {
+      width: 40px;
+      height: 40px;
+      margin-right: 20px;
+      border-radius: 50%;
+      box-shadow: 5px 5px 15px #00000022;
+    }
+    .list-text {
+      @include flex-col;
+      align-items: flex-start;
+    }
+    .list-iso {
+      color: $font-grey;
+      font-size: 90%;
+      font-weight: normal;
+    }
+    .list-del {
+      position: absolute;
+      right: 10px;
+      &:hover .list-del-icon {
+        color: black;
+      }
+    }
+    .list-del-icon {
+      color: $font-grey;
+    }
+
+    // modal内语言列表的每一项
+    .dialog-item {
+      @include flex-row;
+      cursor: pointer;
+    }
   }
 
-  // modal内语言列表的每一项
-  .dialog-item {
-    @include flex-row;
-    cursor: pointer;
+  // 创建按钮
+  .new-create {
+    position: fixed;
+    bottom: 40px;
+    right: 10vw;
   }
 }

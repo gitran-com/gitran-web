@@ -7,6 +7,7 @@ const CONFIG = {
   },
   github: {
     loginURL: isDev ? "http://gitran.com:7000/api/v1/auth/github?scope=user" : "/api/v1/auth/github?scope=user",
+    repoURL: isDev ? "http://gitran.com:7000/api/v1/auth/github?scope=repo" : "/api/v1/auth/github?scope=repo",
     repositoryUrl: "https://github.com/gitran-com/gitran-web",
   },
 };

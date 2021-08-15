@@ -18,3 +18,7 @@ export const authRegister = (data: RegisterInfo) => http.post("/auth/register", 
  */
 export const authGithubNew = (password: string, token: string) =>
   axios.post(`${CONFIG.http.baseURL}/auth/github/new`, { password }, { headers: { Authorization: `Bearer ${token}` } });
+/**
+ * 获取GitHub中的仓库列表
+ */
+export const authGithubRepo = () => http.get("/auth/github/repos");
