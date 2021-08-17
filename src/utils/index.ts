@@ -3,3 +3,4 @@ export * from "./navigateTo";
 export * from "./storage";
 export * from "./login";
 export * from "./langToFlag";
+export * from "./debounce";

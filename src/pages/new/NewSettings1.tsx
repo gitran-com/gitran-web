@@ -11,7 +11,7 @@ export default function Settings1({
   setAllRepos,
 }: {
   repo: string;
-  setRepo: React.Dispatch<React.SetStateAction<string>>;
+  setRepo: (repo: string) => void;
   allRepos: GitHubRepo[];
   setAllRepos: React.Dispatch<React.SetStateAction<GitHubRepo[]>>;
 }) {

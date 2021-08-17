@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { InputAdornment, TextField, MenuItem, Button } from "@material-ui/core";
-import { PlusIcon, XIcon } from "@primer/octicons-react";
 import { GitHubRepo, Lang, LangCode } from "@/types/index";
-import { getLanguages } from "@/apis/index";
-import { langToFlag } from "@/utils/index";
+import { getLanguages, getProjectExist, postNewProject } from "@/apis/index";
+import { debounce } from "@/utils/index";
 import Settings1 from "./NewSettings1";
 import Settings2 from "./NewSettings2";
 import NewDialog from "./NewDialog";
+import NewLangList from "./NewLangList";
 
 enum Projects {
   GitHub,
@@ -21,10 +21,25 @@ export interface MenuItem {
 }
 interface ProjInfo {
   name: string;
-  desc?: string;
+  desc: string;
   uri: string;
+  gitUrl: string;
+  accessToken?: string;
 }
 export default function New() {
+  // 项目基本信息
+  const [basicValues, setBasicValues] = useState<ProjInfo>({
+    name: "",
+    uri: "",
+    desc: "",
+    gitUrl: "",
+  });
+  const [err, setErr] = useState<ProjInfo>({
+    name: "",
+    desc: "",
+    uri: "",
+    gitUrl: "",
+  });
   const [projType, setProjType] = useState<number>(0);
   // 所有的语言列表
   const [allLangs, setAllLangs] = useState<Lang[]>([]);
@@ -34,21 +49,8 @@ export default function New() {
   const [editingLangs, setEditingLangs] = useState<0 | 1>(0);
   // 选择语言的Dialog
   const [openDiag, setOpenDiag] = useState(false);
-  // 用户选择的GitHub仓库
-  const [repo, setRepo] = useState<string>("");
   // 用户所有的GitHub仓库
   const [allRepos, setAllRepos] = useState<GitHubRepo[]>([]);
-
-  const menu: MenuItem[] = [
-    {
-      key: 0,
-      type: Projects.GitHub,
-      content: "Import from My GitHub",
-      component: <Settings1 {...{ repo, setRepo, allRepos, setAllRepos }} />,
-    },
-    { key: 1, type: Projects.Git, content: "Import from Git URL", component: <Settings2 /> },
-    { key: 2, type: Projects.Empty, content: "Create Empty Project" },
-  ];
 
   useEffect(() => {
     initLangs();
@@ -67,37 +69,79 @@ export default function New() {
     setOpenDiag(false);
   };
   /**
-   * 根据语言的code获取语言
+   * 输入函数
+   * @param prop
    */
-  const codeToLang = (code: LangCode) => {
-    return allLangs.filter(item => item.code === code)[0];
+  const onInput = (prop: keyof ProjInfo) => async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBasicValues({ ...basicValues, [prop]: e.target.value });
+    if (prop === "uri") {
+      const isValid = /^[0-9a-z]{1,16}$/.test(e.target.value);
+      if (!isValid) {
+        setErr({ ...err, uri: "Invalide address" });
+      } else {
+        const { data } = await getProjectExist(e.target.value);
+        setErr({ ...err, uri: !data.existed ? "" : "Project existed or Invalid address" });
+      }
+    }
   };
-  /**
-   * 删除语言
-   * @param langType 待删除语言的类型 source/translate
-   * @param langIndex 待删除语言的index
-   */
-  const deleteLang = (langType: 0 | 1, langIndex: number) => {
-    const newLangs: [LangCode[], LangCode[]] = [...langs];
-    newLangs[langType] = [...newLangs[langType].slice(0, langIndex), ...newLangs[langType].slice(langIndex + 1)];
-    setLangs(newLangs);
+  const onProjectCreate = () => {
+    const { name, uri, desc, gitUrl } = basicValues;
+    postNewProject(projType, name, uri, desc, gitUrl, langs[0], langs[1]);
   };
-  /**
-   * 点击add图标添加语言
-   */
-  const addLang = (index: 0 | 1) => {
-    setOpenDiag(true);
-    setEditingLangs(index);
-  };
+  const menu: MenuItem[] = [
+    {
+      key: 0,
+      type: Projects.GitHub,
+      content: "Import from My GitHub",
+      component: (
+        <Settings1
+          {...{
+            repo: basicValues.gitUrl,
+            setRepo: repo => {
+              setBasicValues({ ...basicValues, gitUrl: repo });
+            },
+            allRepos,
+            setAllRepos,
+          }}
+        />
+      ),
+    },
+    { key: 1, type: Projects.Git, content: "Import from Git URL", component: <Settings2 {...{ onInput }} /> },
+    // { key: 2, type: Projects.Empty, content: "Create Empty Project" },
+  ];
   return (
     <div className="new-project">
       <div className="title">Create a Gitran Project</div>
-      <TextField className="input" label="Project Name" variant="outlined" />
+      <TextField
+        className="input"
+        label="Project Name"
+        variant="outlined"
+        onChange={debounce(onInput("name"))}
+        error={Boolean(err.name)}
+        inputProps={{
+          maxLength: 16,
+        }}
+      />
       <TextField
         className="input"
         label="Project Address"
         variant="outlined"
-        InputProps={{ startAdornment: <InputAdornment position="start">{window.location.origin}/</InputAdornment> }}
+        onInput={debounce(onInput("uri"))}
+        helperText={err.uri}
+        error={Boolean(err.uri)}
+        InputProps={{
+          startAdornment: <InputAdornment position="start">{window.location.origin}/</InputAdornment>,
+        }}
+        inputProps={{
+          maxLength: 16,
+        }}
+      />
+      <TextField
+        className="input"
+        label="Project Description"
+        variant="outlined"
+        helperText="optional"
+        onInput={onInput("desc")}
       />
       {/* 项目类型选择栏 */}
       <div className="new-type">
@@ -119,34 +163,17 @@ export default function New() {
       </div>
       {/* 源语言与目标语言选择 */}
       <div className="langs">
-        {["Source Languages", "Translate Languages"].map((item, index) => {
-          return (
-            <div key={item} className="langs-item">
-              {/* 标题 */}
-              <div className="langs-title">
-                {item}
-                <div onClick={() => addLang(index as 0 | 1)}>
-                  <PlusIcon className="list-add" size={24} />
-                </div>
-              </div>
-              {/* 语言列表 */}
-              <div className="langs-list">
-                {langs[index].map((code, langIndex) => (
-                  <div key={code} className="list-item">
-                    <img className="list-flag" src={langToFlag(code, "round")} />
-                    <div className="list-text">
-                      <div>{codeToLang(code).name}</div>
-                      <div className="list-iso">{codeToLang(code).iso}</div>
-                    </div>
-                    <div className="list-del" onClick={() => deleteLang(index as 0 | 1, langIndex)}>
-                      <XIcon className="list-del-icon" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })}
+        <NewLangList
+          {...{
+            setEditingLangs,
+            langs,
+            allLangs,
+            setLangs,
+            onDialogOpen: () => {
+              setOpenDiag(true);
+            },
+          }}
+        />
         <NewDialog
           list={allLangs}
           selected={langs[editingLangs]}
@@ -161,7 +188,20 @@ export default function New() {
       </div>
       {/* 创建按钮 */}
       <div className="new-create">
-        <Button color="primary" variant="contained" disabled size="large">
+        <Button
+          color="primary"
+          variant="contained"
+          disabled={
+            !basicValues.name ||
+            !basicValues.uri ||
+            !langs[0].length ||
+            !langs[1].length ||
+            !basicValues.gitUrl ||
+            Boolean(err.uri)
+          }
+          size="large"
+          onClick={onProjectCreate}
+        >
           Create
         </Button>
       </div>
