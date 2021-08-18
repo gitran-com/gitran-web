@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { InputAdornment, TextField, MenuItem, Button } from "@material-ui/core";
+import { InputAdornment, TextField, MenuItem, Button, Tabs, Tab } from "@material-ui/core";
 import { GitHubRepo, Lang, LangCode } from "@/types/index";
 import { getLanguages, getProjectExist, postNewProject } from "@/apis/index";
 import { debounce } from "@/utils/index";
@@ -34,6 +34,7 @@ export default function New() {
     desc: "",
     gitUrl: "",
   });
+  // 错误信息
   const [err, setErr] = useState<ProjInfo>({
     name: "",
     desc: "",
@@ -84,9 +85,12 @@ export default function New() {
       }
     }
   };
+  /**
+   * 创建新项目
+   */
   const onProjectCreate = () => {
-    const { name, uri, desc, gitUrl } = basicValues;
-    postNewProject(projType, name, uri, desc, gitUrl, langs[0], langs[1]);
+    const { name, uri, desc, gitUrl, accessToken } = basicValues;
+    postNewProject(projType, name, uri, desc, gitUrl, langs[0], langs[1], accessToken);
   };
   const menu: MenuItem[] = [
     {
@@ -145,20 +149,18 @@ export default function New() {
       />
       {/* 项目类型选择栏 */}
       <div className="new-type">
-        <div className="tab">
+        <Tabs
+          value={projType}
+          onChange={(event: React.ChangeEvent<{}>, newValue: number) => {
+            setProjType(newValue);
+          }}
+          textColor="primary"
+          indicatorColor="primary"
+        >
           {menu.map(item => (
-            <div
-              key={item.key}
-              className={item.key === projType ? "tab-cur tab-item" : "tab-item"}
-              onClick={() => {
-                setProjType(item.key);
-              }}
-            >
-              {item.content}
-            </div>
+            <Tab key={item.key} label={item.content} style={{ textTransform: "initial" }} />
           ))}
-          <div className="tab-bottom" style={{ transform: `translateX(${menu[projType].key * 200}px)` }}></div>
-        </div>
+        </Tabs>
         <div className="settings">{menu[projType].component}</div>
       </div>
       {/* 源语言与目标语言选择 */}

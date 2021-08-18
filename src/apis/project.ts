@@ -30,5 +30,5 @@ export const postNewProject = (
   git_url: string,
   src_langs: LangCode[],
   trn_langs: LangCode[],
-  access_token?: ""
+  access_token?: string
 ) => http.post("/projects", { type, name, uri, desc, git_url, src_langs, trn_langs, access_token });
