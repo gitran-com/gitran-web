@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { InputAdornment, TextField, MenuItem, Button, Tabs, Tab } from "@material-ui/core";
-import { GitHubRepo, Lang, LangCode } from "@/types/index";
+import { GitHubRepo, Lang, LangCode, ProjectType } from "@/types/index";
 import { getLanguages, getProjectExist, postNewProject } from "@/apis/index";
 import { debounce } from "@/utils/index";
 import Settings1 from "./NewSettings1";
@@ -8,14 +8,8 @@ import Settings2 from "./NewSettings2";
 import NewDialog from "./NewDialog";
 import NewLangList from "./NewLangList";
 
-enum Projects {
-  GitHub,
-  Git,
-  Empty,
-}
 export interface MenuItem {
-  key: number;
-  type: Projects;
+  type: ProjectType;
   content: string;
   component?: JSX.Element;
 }
@@ -94,8 +88,7 @@ export default function New() {
   };
   const menu: MenuItem[] = [
     {
-      key: 0,
-      type: Projects.GitHub,
+      type: ProjectType.GitHub,
       content: "Import from My GitHub",
       component: (
         <Settings1
@@ -110,8 +103,8 @@ export default function New() {
         />
       ),
     },
-    { key: 1, type: Projects.Git, content: "Import from Git URL", component: <Settings2 {...{ onInput }} /> },
-    // { key: 2, type: Projects.Empty, content: "Create Empty Project" },
+    { type: ProjectType.Git, content: "Import from Git URL", component: <Settings2 {...{ onInput }} /> },
+    // {  type: Projects.Empty, content: "Create Empty Project" },
   ];
   return (
     <div className="new-project">
@@ -158,7 +151,7 @@ export default function New() {
           indicatorColor="primary"
         >
           {menu.map(item => (
-            <Tab key={item.key} label={item.content} style={{ textTransform: "initial" }} />
+            <Tab key={item.type} label={item.content} style={{ textTransform: "initial" }} />
           ))}
         </Tabs>
         <div className="settings">{menu[projType].component}</div>

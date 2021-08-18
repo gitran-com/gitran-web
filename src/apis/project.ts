@@ -32,3 +32,8 @@ export const postNewProject = (
   trn_langs: LangCode[],
   access_token?: string
 ) => http.post("/projects", { type, name, uri, desc, git_url, src_langs, trn_langs, access_token });
+/**
+ * 获取项目信息
+ * @param uri
+ */
+export const getProjectInfo = (uri: string) => http.get(`/projects/${uri}`);

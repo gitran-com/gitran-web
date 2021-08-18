@@ -10,6 +10,7 @@ const Login = lazy(() => import("./pages/login/Login"));
 const Signup = lazy(() => import("./pages/login/Signup"));
 const Profile = lazy(() => import("./pages/profile/Profile"));
 const New = lazy(() => import("./pages/new/New"));
+const Project = lazy(() => import("./pages/project/Project"));
 const NotFound = lazy(() => import("./pages/404/404"));
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/me" component={Profile} />
           <Route path="/user/:userId" component={Profile} />
           <Route path="/new" component={New} />
+          <Route path="/project/:uri" component={Project} />
           <Route path="*" component={NotFound} />
         </Switch>
       </Suspense>

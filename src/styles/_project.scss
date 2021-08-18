@@ -1,0 +1,22 @@
+.project {
+  max-width: $content-width;
+  margin: 0 auto;
+  padding: 20px 0;
+  .title {
+    margin: 16px 0;
+    font-size: 180%;
+    color: $blue;
+  }
+  .project-tab {
+    border-bottom: 1px solid $border-grey;
+    .MuiTab-wrapper {
+      flex-direction: row !important;
+      align-items: center;
+    }
+    .tab {
+      span {
+        margin-left: 4px;
+      }
+    }
+  }
+}
