@@ -1,10 +1,12 @@
 .new-project {
   align-items: flex-start;
   margin: 0 auto;
-  max-width: $content-width;
+  max-width: $content-width * 0.8;
   padding: 50px 0;
   .title {
+    text-align: left;
     font-size: 200%;
+    margin-bottom: 20px;
   }
   .input {
     width: 100%;
