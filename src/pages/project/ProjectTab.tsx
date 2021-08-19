@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { EyeIcon, GearIcon, Icon, PeopleIcon, RowsIcon } from "@primer/octicons-react";
 import { Tab, Tabs } from "@material-ui/core";
 import { ProjectRole } from "@/types/index";
+import { Link } from "react-router-dom";
 
 interface MenuItem {
   authorize: ProjectRole[];
@@ -38,7 +39,7 @@ const menu: MenuItem[] = [
   },
 ];
 
-export default function ProjectTab({ role }: { role: ProjectRole }) {
+export default function ProjectTab({ role, uri }: { role: ProjectRole; uri: string }) {
   const [curMenu, setCurMenu] = useState<number>(0);
   return (
     <div className="project-tab">
@@ -52,16 +53,18 @@ export default function ProjectTab({ role }: { role: ProjectRole }) {
       >
         {menu
           .filter(item => item.authorize.indexOf(role) !== -1)
-          .map(item => (
+          .map((item, index) => (
             <Tab
               key={item.content}
               label={
-                <div className="tab">
+                <Link
+                  className={`tab ${index === curMenu ? "cur-tab" : ""}`}
+                  to={`/project/${uri}/${menu[index].content.toLowerCase()}`}
+                >
                   <item.icon />
                   <span>{item.content}</span>
-                </div>
+                </Link>
               }
-              style={{ textTransform: "initial" }}
             />
           ))}
       </Tabs>

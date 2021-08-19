@@ -19,16 +19,13 @@ export enum ProjectType {
   Empty,
 }
 
-export interface BasicProjectInfo {
+export interface ProjectInfo {
   id: ProjectId;
   name: string;
   ownerId: UserId;
   srcLangs: Lang[];
   trnLangs: Lang[];
   updatedAt: string;
-  [key: string]: any;
-}
-export interface ProjectInfo extends BasicProjectInfo {
   status: ProjectStatus;
   type: ProjectType;
   createdAt: string;

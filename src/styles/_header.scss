@@ -1,4 +1,4 @@
-.header {
+.header-component {
   @include flex-col;
   width: 100vw;
   color: white;
@@ -41,8 +41,6 @@
   // navigation bar - login button
   .login,
   .signup {
-    margin: 0 20px;
     color: white;
-    text-decoration: none;
   }
 }

@@ -46,7 +46,7 @@ export default function Header() {
     logout();
   };
   return window.location.pathname === "/login" || window.location.pathname === "/signup" ? null : (
-    <div className="header">
+    <div className="header-component">
       <div className="container">
         <div className="left">
           <Link to="/">

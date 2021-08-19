@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 import { GearIcon } from "@primer/octicons-react";
 import { getUserProject, getUsersProjects } from "@/apis/index";
-import { UserId, BasicProjectInfo, LangCode } from "@/types/index";
+import { UserId, LangCode, ProjectInfo } from "@/types/index";
 import { langToFlag } from "@/utils/index";
 
 export default function Content() {
   const { userId } = useRouteMatch().params as { userId: UserId };
   const isMe: boolean = window.location.pathname === "/me";
-  const [projects, setProjects] = useState<BasicProjectInfo[]>([]);
+  const [projects, setProjects] = useState<ProjectInfo[]>([]);
   useEffect(() => {
     initProjectList();
   }, []);
   const initProjectList = async () => {
     const { data } = await (isMe ? getUserProject() : getUsersProjects(userId));
-    const { projs }: { projs: BasicProjectInfo[] | null } = data;
+    const { projs }: { projs: ProjectInfo[] | null } = data;
     if (projs) {
       setProjects(projs);
     }
@@ -26,7 +26,9 @@ export default function Content() {
           return (
             <div key={proj.id} className="projects-item">
               <div className="projects-item-left">
-                <div className="projects-item-name">{proj.name}</div>
+                <Link className="projects-item-name" to={`project/${proj.uri}`}>
+                  {proj.name}
+                </Link>
                 <div className="projects-item-flags">
                   {proj.srcLangs.map(src => (
                     <img key={src.code} className="projects-item-flag" src={langToFlag(src.code as LangCode)} />

@@ -151,7 +151,7 @@ export default function New() {
           indicatorColor="primary"
         >
           {menu.map(item => (
-            <Tab key={item.type} label={item.content} style={{ textTransform: "initial" }} />
+            <Tab key={item.type} label={item.content} />
           ))}
         </Tabs>
         <div className="settings">{menu[projType].component}</div>
